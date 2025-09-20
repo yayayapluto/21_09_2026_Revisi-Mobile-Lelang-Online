@@ -1,6 +1,7 @@
 # revisi-mobile-lelang-online
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, and more.
+This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern
+TypeScript stack that combines React, TanStack Router, and more.
 
 ## Features
 
@@ -18,7 +19,6 @@ First, install the dependencies:
 bun install
 ```
 
-
 Then, run the development server:
 
 ```bash
@@ -26,10 +26,6 @@ bun dev
 ```
 
 Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
-
-
-
-
 
 ## Project Structure
 
