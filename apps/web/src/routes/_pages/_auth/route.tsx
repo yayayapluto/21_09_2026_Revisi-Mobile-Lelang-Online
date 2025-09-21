@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_pages/_auth')({
 
 function RouteComponent() {
     return (
-        <div className="h-full px-4 py-6">
+        <div className="h-full">
             <Outlet/>
         </div>
     )

@@ -1,11 +1,27 @@
-import {createFileRoute, Link, useNavigate} from "@tanstack/react-router";
+import {createFileRoute, Link, redirect, useNavigate} from "@tanstack/react-router";
 import {Button} from "@/components/ui/button";
 import {Carousel, type CarouselApi, CarouselContent, CarouselItem,} from "@/components/ui/carousel"
 import React from "react";
 import {cn} from "@/lib/utils";
+import Cookies from "js-cookie";
+import axios from "axios";
+import type {ApiResponse} from "../../types/api-response";
 
 export const Route = createFileRoute("/")({
     component: HomeComponent,
+    beforeLoad: async (): Promise<void> => {
+        const token = Cookies.get("auth_token")
+        if (token) {
+            const res = await axios.get<ApiResponse>(
+                `${import.meta.env.VITE_SERVER_URL}/auth/me`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+
+            if (res.data.success) {
+                throw redirect({ to: "/home" })
+            }
+        }
+    },
 });
 
 function HomeComponent() {

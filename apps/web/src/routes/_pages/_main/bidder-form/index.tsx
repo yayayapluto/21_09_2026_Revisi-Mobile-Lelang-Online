@@ -8,6 +8,11 @@ import {ArrowLeft} from "lucide-react";
 
 export const Route = createFileRoute('/_pages/_main/bidder-form/')({
     component: RouteComponent,
+    validateSearch: (search: Record<string, number>) => {
+        return {
+            auction_id: search?.auction_id,
+        }
+    }
 })
 
 function RouteComponent() {

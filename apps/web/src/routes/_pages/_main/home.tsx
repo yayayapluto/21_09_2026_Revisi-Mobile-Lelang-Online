@@ -1,18 +1,38 @@
-import {createFileRoute, Link, useNavigate} from '@tanstack/react-router'
-import {Carousel, type CarouselApi, CarouselContent, CarouselItem,} from "@/components/ui/carousel"
-import React, {Profiler} from "react";
+import {createFileRoute, useNavigate} from '@tanstack/react-router'
+import {
+    Carousel,
+    type CarouselApi,
+    CarouselContent,
+    CarouselItem,
+} from "@/components/ui/carousel"
+import React from "react";
 import {cn} from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay"
-import {Button} from "@/components/ui/button";
 import {DummyAuctionCard} from "@/components/dummy-auction-card";
 import {Input} from "@/components/ui/input";
-import {Clipboard, Gavel, Home, House, ScrollText, SearchIcon, UserCircle} from "lucide-react";
-import {Separator} from "@/components/ui/separator";
-
+import {LoaderCircle, SearchIcon} from "lucide-react";
+import axios from "axios";
+import type {ApiResponse} from "../../../../types/api-response";
+import Cookies from "js-cookie";
+import type {Pagination} from "../../../../types/pagination";
+import type {Auction} from "../../../../types/auction";
+import {AuctionCard} from "@/components/auction-card";
+import {useInfiniteQuery} from "@tanstack/react-query";
 
 export const Route = createFileRoute('/_pages/_main/home')({
     component: RouteComponent,
 })
+
+const fetchAuctions = async ({ pageParam = 1 }): Promise<ApiResponse<Pagination>> => {
+    const token = Cookies.get("auth_token")
+    const response = await axios.get<ApiResponse<Pagination>>(
+        `${import.meta.env.VITE_SERVER_URL}/auctions?page=${pageParam}`,
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    )
+    return response.data
+}
 
 function RouteComponent() {
     const CAROUSEL_BANNERS = [
@@ -27,23 +47,61 @@ function RouteComponent() {
     const [api, setApi] = React.useState<CarouselApi>()
     const [current, setCurrent] = React.useState(0)
     React.useEffect(() => {
-        if (!api) {
-            return
-        }
+        if (!api) return
         setCurrent(api.selectedScrollSnap())
         api.on("select", () => {
             setCurrent(api.selectedScrollSnap())
         })
     }, [api])
 
-    const [totalDummy, setTotalDummy] = React.useState<number>(10)
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isLoading,
+        error,
+    } = useInfiniteQuery({
+        queryKey: ['auctions'],
+        queryFn: fetchAuctions,
+        getNextPageParam: (lastPage) => {
+            const currentPage = lastPage.content?.current_page ?? 1
+            const totalPages = lastPage.content?.total_pages ?? 1
+            return currentPage < totalPages ? currentPage + 1 : undefined
+        },
+        initialPageParam: 1,
+    })
+
+    const loadMoreRef = React.useRef<HTMLDivElement | null>(null)
+
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage()
+                }
+            },
+            { threshold: 0.1 }
+        )
+
+        if (loadMoreRef.current) observer.observe(loadMoreRef.current)
+
+        return () => {
+            if (loadMoreRef.current) observer.unobserve(loadMoreRef.current)
+        }
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+
+    const auctions = data?.pages.flatMap(page => page.content?.data ?? []) ?? []
 
     const navigate = useNavigate()
+
+    if (error) {
+        console.error(error)
+    }
+
     return (
         <div className={"grid grid-rows-[1fr] gap-4"}>
-            <div
-                className="w-full p-2 sticky top-0 bg-white z-10 flex flex-col gap-4"
-            >
+            <div className="w-full p-2 sticky top-0 bg-white z-10 flex flex-col gap-4">
                 <div className={"relative w-full"}>
                     <Input
                         disabled
@@ -57,13 +115,11 @@ function RouteComponent() {
             </div>
             <div className="flex flex-col gap-4">
                 <Carousel setApi={setApi} plugins={[
-                    Autoplay({
-                        delay: 3000,
-                    }),
+                    Autoplay({ delay: 3000 }),
                 ]}>
                     <CarouselContent>
-                        {CAROUSEL_BANNERS.map((banner) => (
-                            <CarouselItem>
+                        {CAROUSEL_BANNERS.map((banner, index) => (
+                            <CarouselItem key={index}>
                                 <img className={"aspect-video size-full object-cover"} src={banner} alt=""/>
                             </CarouselItem>
                         ))}
@@ -100,14 +156,15 @@ function RouteComponent() {
                 <div className="space-y-2">
                     <h3 className="text-lg font-semibold">Lelang Terbaru</h3>
                     <div className={"grid grid-cols-2 gap-2"}>
-                        {Array.from({length: totalDummy}).map((_, index) => (
-                            <DummyAuctionCard/>
+                        {auctions.map((auction, index) => (
+                            <AuctionCard auction={auction} key={index} />
                         ))}
                     </div>
-                    <Button className={"bg-orange-600 hover:bg-orange-700 w-full mt-4"}
-                            onClick={() => setTotalDummy(prev => prev + 10)}>
-                        Tampilkan Lebih Banyak
-                    </Button>
+                    {hasNextPage && (
+                        <div ref={loadMoreRef} className="h-10 w-full flex items-center justify-center">
+                            <LoaderCircle className="text-muted-foreground animate-spin"/>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

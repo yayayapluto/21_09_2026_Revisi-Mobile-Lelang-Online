@@ -1,16 +1,35 @@
-import {createFileRoute} from '@tanstack/react-router'
+import {createFileRoute, redirect, useLoaderData, useNavigate} from '@tanstack/react-router'
 import {Skeleton} from "@/components/ui/skeleton";
 import {Separator} from "@/components/ui/separator";
 import {Info} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import type {User} from "../../../../../types/user";
+import Cookies from "js-cookie";
+import axios from "axios";
+import type {ApiResponse} from "../../../../../types/api-response";
+import type {Auction} from "../../../../../types/auction";
+
+const fetchProfileData = async () : Promise<User> => {
+    const token = Cookies.get("auth_token")
+    const response = await axios.get<ApiResponse<User>>(
+        `${import.meta.env.VITE_SERVER_URL}/auth/me`,
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    )
+    return response.data.content!
+}
 
 export const Route = createFileRoute('/_pages/_main/profile/')({
     component: RouteComponent,
+    loader: () => fetchProfileData()
 })
 
 function RouteComponent() {
+    const navigate = useNavigate()
+    const profile = Route.useLoaderData()
     return (
-        <div className="grid grid-rows-[1fr] gap-6 p-4">
+        <div className="h-full flex flex-col justify-center gap-8 p-4">
             <div className="flex items-center justify-center">
                 <Skeleton className={"size-24 rounded-full"}/>
             </div>
@@ -22,22 +41,29 @@ function RouteComponent() {
                 </h3>
                 <div className="flex items-center justify-between">
                     <h3 className="text-muted-foreground">Username</h3>
-                    <h3>Lorem ipsum dolor sit.</h3>
+                    <h3>{profile.username}</h3>
                 </div>
                 <div className="flex items-center justify-between">
                     <h3 className="text-muted-foreground">Email</h3>
-                    <h3>Lorem ipsum dolor sit.</h3>
+                    <h3>{profile.email}</h3>
                 </div>
             </div>
             <Separator/>
             <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                     <h3 className="text-muted-foreground">Terakhir Login Pada</h3>
-                    <h3>17 Agustus 2025 07:40</h3>
+                    <h3>{profile.last_login_at?.toString()}</h3>
                 </div>
-                <Button variant={"outline"}>
+                <Button
+                    variant="outline"
+                    onClick={async () => {
+                        Cookies.remove("auth_token")
+                        await navigate({ to: "/login", search: {fallback: "", reason: undefined}})
+                    }}
+                >
                     Keluar Akun
                 </Button>
+
             </div>
         </div>
     )

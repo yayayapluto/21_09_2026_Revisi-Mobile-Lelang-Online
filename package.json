@@ -14,7 +14,11 @@
     "dev:web": "turbo -F web dev",
     "dev:server": "turbo -F server dev"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "axios": "^1.12.2",
+    "js-cookie": "^3.0.5"
+  },
   "devDependencies": {
     "turbo": "^2.5.4"
   },

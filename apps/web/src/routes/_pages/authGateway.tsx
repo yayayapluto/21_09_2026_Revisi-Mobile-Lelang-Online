@@ -1,9 +1,25 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router'
+import {createFileRoute, redirect, useNavigate} from '@tanstack/react-router'
 import React from "react";
 import {Button} from "@/components/ui/button";
+import Cookies from "js-cookie";
+import axios from "axios";
+import type {ApiResponse} from "../../../types/api-response";
 
 export const Route = createFileRoute('/_pages/authGateway')({
     component: RouteComponent,
+    beforeLoad: async (): Promise<void> => {
+        const token = Cookies.get("auth_token")
+        if (token) {
+            const res = await axios.get<ApiResponse>(
+                `${import.meta.env.VITE_SERVER_URL}/auth/me`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+
+            if (res.data.success) {
+                throw redirect({ to: "/home" })
+            }
+        }
+    },
 })
 
 function RouteComponent() {
@@ -23,7 +39,7 @@ function RouteComponent() {
 
             <div className="space-y-2">
                 <Button className="bg-orange-600 hover:bg-orange-700 w-full rounded-full"
-                        onClick={() => navigate({to: "/login"})}>
+                        onClick={() => navigate({to: "/login", search: {fallback: "", reason: undefined}})}>
                     Masuk Ke Aplikasi
                 </Button>
                 <Button variant="outline"
