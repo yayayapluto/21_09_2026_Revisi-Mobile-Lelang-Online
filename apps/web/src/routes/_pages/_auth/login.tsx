@@ -76,7 +76,7 @@ function RouteComponent() {
                     <div className="flex items-center justify-center" onClick={() => navigate({to: "/authGateway"})}>
                         <ArrowLeft className="size-6 text-gray-700"/>
                     </div>
-                    <h3 className="text-xl font-normal">Login</h3>
+                    <h3 className="text-xl font-normal">Masuk</h3>
                 </div>
             </div>
             <form
@@ -87,6 +87,9 @@ function RouteComponent() {
                 }}
                 className={"flex-1 flex flex-col gap-6 justify-center px-4"}
             >
+                <div className="flex flex-col items-center justify-center">
+                    <img src={"/public/illustrations/login.png"} alt="" className="aspect-square size-64 object-contain"/>
+                </div>
                 <form.Field
                     name={"identity"}
                     children={(field) => {

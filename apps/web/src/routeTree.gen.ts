@@ -20,8 +20,7 @@ import { Route as PagesAuthLoginRouteImport } from './routes/_pages/_auth/login'
 import { Route as PagesMainProfileIndexRouteImport } from './routes/_pages/_main/profile/index'
 import { Route as PagesMainHistoryIndexRouteImport } from './routes/_pages/_main/history/index'
 import { Route as PagesMainBidderFormIndexRouteImport } from './routes/_pages/_main/bidder-form/index'
-import { Route as PagesMainBidderFormDummyPaymentRouteImport } from './routes/_pages/_main/bidder-form/dummy-payment'
-import { Route as PagesMainBidderFormAfterPaymentRouteImport } from './routes/_pages/_main/bidder-form/after-payment'
+import { Route as PagesMainBidderFormPaymentConfirmationRouteImport } from './routes/_pages/_main/bidder-form/payment-confirmation'
 import { Route as PagesMainAuctionRoomIdRouteImport } from './routes/_pages/_main/auction-room/$id'
 import { Route as PagesMainDetailIdIndexRouteImport } from './routes/_pages/_main/detail/$id/index'
 
@@ -79,16 +78,10 @@ const PagesMainBidderFormIndexRoute =
     path: '/bidder-form/',
     getParentRoute: () => PagesMainRouteRoute,
   } as any)
-const PagesMainBidderFormDummyPaymentRoute =
-  PagesMainBidderFormDummyPaymentRouteImport.update({
-    id: '/bidder-form/dummy-payment',
-    path: '/bidder-form/dummy-payment',
-    getParentRoute: () => PagesMainRouteRoute,
-  } as any)
-const PagesMainBidderFormAfterPaymentRoute =
-  PagesMainBidderFormAfterPaymentRouteImport.update({
-    id: '/bidder-form/after-payment',
-    path: '/bidder-form/after-payment',
+const PagesMainBidderFormPaymentConfirmationRoute =
+  PagesMainBidderFormPaymentConfirmationRouteImport.update({
+    id: '/bidder-form/payment-confirmation',
+    path: '/bidder-form/payment-confirmation',
     getParentRoute: () => PagesMainRouteRoute,
   } as any)
 const PagesMainAuctionRoomIdRoute = PagesMainAuctionRoomIdRouteImport.update({
@@ -110,8 +103,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof PagesMainHomeRoute
   '/list': typeof PagesMainListRoute
   '/auction-room/$id': typeof PagesMainAuctionRoomIdRoute
-  '/bidder-form/after-payment': typeof PagesMainBidderFormAfterPaymentRoute
-  '/bidder-form/dummy-payment': typeof PagesMainBidderFormDummyPaymentRoute
+  '/bidder-form/payment-confirmation': typeof PagesMainBidderFormPaymentConfirmationRoute
   '/bidder-form': typeof PagesMainBidderFormIndexRoute
   '/history': typeof PagesMainHistoryIndexRoute
   '/profile': typeof PagesMainProfileIndexRoute
@@ -125,8 +117,7 @@ export interface FileRoutesByTo {
   '/home': typeof PagesMainHomeRoute
   '/list': typeof PagesMainListRoute
   '/auction-room/$id': typeof PagesMainAuctionRoomIdRoute
-  '/bidder-form/after-payment': typeof PagesMainBidderFormAfterPaymentRoute
-  '/bidder-form/dummy-payment': typeof PagesMainBidderFormDummyPaymentRoute
+  '/bidder-form/payment-confirmation': typeof PagesMainBidderFormPaymentConfirmationRoute
   '/bidder-form': typeof PagesMainBidderFormIndexRoute
   '/history': typeof PagesMainHistoryIndexRoute
   '/profile': typeof PagesMainProfileIndexRoute
@@ -143,8 +134,7 @@ export interface FileRoutesById {
   '/_pages/_main/home': typeof PagesMainHomeRoute
   '/_pages/_main/list': typeof PagesMainListRoute
   '/_pages/_main/auction-room/$id': typeof PagesMainAuctionRoomIdRoute
-  '/_pages/_main/bidder-form/after-payment': typeof PagesMainBidderFormAfterPaymentRoute
-  '/_pages/_main/bidder-form/dummy-payment': typeof PagesMainBidderFormDummyPaymentRoute
+  '/_pages/_main/bidder-form/payment-confirmation': typeof PagesMainBidderFormPaymentConfirmationRoute
   '/_pages/_main/bidder-form/': typeof PagesMainBidderFormIndexRoute
   '/_pages/_main/history/': typeof PagesMainHistoryIndexRoute
   '/_pages/_main/profile/': typeof PagesMainProfileIndexRoute
@@ -160,8 +150,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/list'
     | '/auction-room/$id'
-    | '/bidder-form/after-payment'
-    | '/bidder-form/dummy-payment'
+    | '/bidder-form/payment-confirmation'
     | '/bidder-form'
     | '/history'
     | '/profile'
@@ -175,8 +164,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/list'
     | '/auction-room/$id'
-    | '/bidder-form/after-payment'
-    | '/bidder-form/dummy-payment'
+    | '/bidder-form/payment-confirmation'
     | '/bidder-form'
     | '/history'
     | '/profile'
@@ -192,8 +180,7 @@ export interface FileRouteTypes {
     | '/_pages/_main/home'
     | '/_pages/_main/list'
     | '/_pages/_main/auction-room/$id'
-    | '/_pages/_main/bidder-form/after-payment'
-    | '/_pages/_main/bidder-form/dummy-payment'
+    | '/_pages/_main/bidder-form/payment-confirmation'
     | '/_pages/_main/bidder-form/'
     | '/_pages/_main/history/'
     | '/_pages/_main/profile/'
@@ -286,18 +273,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesMainBidderFormIndexRouteImport
       parentRoute: typeof PagesMainRouteRoute
     }
-    '/_pages/_main/bidder-form/dummy-payment': {
-      id: '/_pages/_main/bidder-form/dummy-payment'
-      path: '/bidder-form/dummy-payment'
-      fullPath: '/bidder-form/dummy-payment'
-      preLoaderRoute: typeof PagesMainBidderFormDummyPaymentRouteImport
-      parentRoute: typeof PagesMainRouteRoute
-    }
-    '/_pages/_main/bidder-form/after-payment': {
-      id: '/_pages/_main/bidder-form/after-payment'
-      path: '/bidder-form/after-payment'
-      fullPath: '/bidder-form/after-payment'
-      preLoaderRoute: typeof PagesMainBidderFormAfterPaymentRouteImport
+    '/_pages/_main/bidder-form/payment-confirmation': {
+      id: '/_pages/_main/bidder-form/payment-confirmation'
+      path: '/bidder-form/payment-confirmation'
+      fullPath: '/bidder-form/payment-confirmation'
+      preLoaderRoute: typeof PagesMainBidderFormPaymentConfirmationRouteImport
       parentRoute: typeof PagesMainRouteRoute
     }
     '/_pages/_main/auction-room/$id': {
@@ -335,8 +315,7 @@ interface PagesMainRouteRouteChildren {
   PagesMainHomeRoute: typeof PagesMainHomeRoute
   PagesMainListRoute: typeof PagesMainListRoute
   PagesMainAuctionRoomIdRoute: typeof PagesMainAuctionRoomIdRoute
-  PagesMainBidderFormAfterPaymentRoute: typeof PagesMainBidderFormAfterPaymentRoute
-  PagesMainBidderFormDummyPaymentRoute: typeof PagesMainBidderFormDummyPaymentRoute
+  PagesMainBidderFormPaymentConfirmationRoute: typeof PagesMainBidderFormPaymentConfirmationRoute
   PagesMainBidderFormIndexRoute: typeof PagesMainBidderFormIndexRoute
   PagesMainHistoryIndexRoute: typeof PagesMainHistoryIndexRoute
   PagesMainProfileIndexRoute: typeof PagesMainProfileIndexRoute
@@ -347,8 +326,8 @@ const PagesMainRouteRouteChildren: PagesMainRouteRouteChildren = {
   PagesMainHomeRoute: PagesMainHomeRoute,
   PagesMainListRoute: PagesMainListRoute,
   PagesMainAuctionRoomIdRoute: PagesMainAuctionRoomIdRoute,
-  PagesMainBidderFormAfterPaymentRoute: PagesMainBidderFormAfterPaymentRoute,
-  PagesMainBidderFormDummyPaymentRoute: PagesMainBidderFormDummyPaymentRoute,
+  PagesMainBidderFormPaymentConfirmationRoute:
+    PagesMainBidderFormPaymentConfirmationRoute,
   PagesMainBidderFormIndexRoute: PagesMainBidderFormIndexRoute,
   PagesMainHistoryIndexRoute: PagesMainHistoryIndexRoute,
   PagesMainProfileIndexRoute: PagesMainProfileIndexRoute,

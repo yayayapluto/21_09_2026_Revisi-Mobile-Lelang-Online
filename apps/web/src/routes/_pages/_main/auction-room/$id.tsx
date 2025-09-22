@@ -38,7 +38,7 @@ function RouteComponent() {
                         <span>01</span>
                     </CardContent>
                 </Card>
-                <Card className="flex-1 gap-1">
+                <Card className="flex-1 gap-1 bg-orange-600/40">
                     <CardHeader>
                         <h2 className="font-medium text-sm ">Riwayat Penawaran</h2>
                     </CardHeader>

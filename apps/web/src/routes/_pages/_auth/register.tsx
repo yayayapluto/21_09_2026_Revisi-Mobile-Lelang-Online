@@ -46,7 +46,7 @@ function RouteComponent() {
                 )
                 Cookies.set("auth_token", res.data.content, {expires: 7})
                 toast.success(res.data.message)
-                navigate({to: "/login"})
+                navigate({to: "/login", search: {fallback: "", reason: undefined}})
             } catch (err: any) {
                 if (err.response?.data?.message) {
                     toast.error(err.response.data.message)
@@ -66,7 +66,7 @@ function RouteComponent() {
                     <div className="flex items-center justify-center" onClick={() => history.back()}>
                         <ArrowLeft className="size-6 text-gray-700"/>
                     </div>
-                    <h3 className="text-xl font-normal">Login</h3>
+                    <h3 className="text-xl font-normal">Daftar</h3>
                 </div>
             </div>
             <div className="h-full flex flex-col">
@@ -78,6 +78,9 @@ function RouteComponent() {
                     }}
                     className="flex-1 flex flex-col gap-6 justify-center px-4"
                 >
+                    <div className="flex flex-col items-center justify-center">
+                        <img src={"/public/illustrations/register.png"} alt="" className="aspect-square size-64 object-contain"/>
+                    </div>
                     <form.Field name="username" children={(field) => (
                         <div className="flex flex-col gap-2">
                             <Label htmlFor={field.name}>Username</Label>
@@ -158,7 +161,7 @@ function RouteComponent() {
                     <p className="text-center">
                         Sudah punya akun?
                         <span className="text-orange-600 ml-1">
-            <Link to="/login">Masuk</Link>
+            <Link to="/login" search={{fallback: "", reason: undefined}}>Masuk</Link>
           </span>
                     </p>
                 </form>

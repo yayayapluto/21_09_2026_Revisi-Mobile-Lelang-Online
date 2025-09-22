@@ -15,6 +15,8 @@ import Cookies from "js-cookie";
 import type {Auction} from "../../../../../../types/auction";
 import type {ApiResponse} from "../../../../../../types/api-response";
 import Loader from "@/components/loader";
+import type {User} from "../../../../../../types/user";
+import type {BidderPayment} from "../../../../../../types/bidderPayment";
 
 const fetchAuctionDetail = async (id: string): Promise<Auction> => {
     const token = Cookies.get("auth_token")
@@ -27,14 +29,36 @@ const fetchAuctionDetail = async (id: string): Promise<Auction> => {
     return response.data.content!
 }
 
+const fetchPaymentStatus = async (id: string): Promise<BidderPayment | null> => {
+    try {
+        const token = Cookies.get("auth_token")
+
+        const userResponse = await axios.get<ApiResponse<User>>(
+            `${import.meta.env.VITE_SERVER_URL}/auth/me`,
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            },
+        )
+
+        const response = await axios.get<ApiResponse<BidderPayment>>(
+            `${import.meta.env.VITE_SERVER_URL}/payment/check?auction_id=${id}&user_id=${userResponse.data.content?.id}`,
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            },
+        )
+
+        return response.data.content!
+    } catch {
+        return null
+    }
+}
+
+
 export const Route = createFileRoute('/_pages/_main/detail/$id/')({
     component: RouteComponent,
-    validateSearch: (search: Record<string, string | boolean>) => {
-        return {
-            bidder: search?.bidder === true || search?.bidder === 'true',
-        }
-    },
-    loader: ({ params }) => fetchAuctionDetail(params.id)
+    loader: async ({ params }) => {
+        return {auction: await fetchAuctionDetail(params.id), payment: await fetchPaymentStatus(params.id)}
+    }
 })
 
 const DetailRow = ({ label, value }: { label: string; value: any }) => {
@@ -51,8 +75,7 @@ const DetailRow = ({ label, value }: { label: string; value: any }) => {
 }
 
 function RouteComponent() {
-    const auction = Route.useLoaderData()
-    const search = Route.useSearch()
+    const {auction, payment} = Route.useLoaderData()
     const navigate = useNavigate()
 
     const [api, setApi] = React.useState<CarouselApi>()
@@ -66,10 +89,10 @@ function RouteComponent() {
     }, [api])
 
     const [isBidder, setIsBidder] = React.useState(false)
+    useEffect(() => {
+        setIsBidder(payment?.status === "confirmed")
+    }, [payment])
 
-    React.useEffect(() => {
-        setIsBidder(search.bidder)
-    }, [search.bidder])
 
     const thumbnails = auction.item.item_thumbnails || []
     const totalThumbnail = thumbnails.length || 1
@@ -298,30 +321,50 @@ function RouteComponent() {
                             <h4 className={"text-sm"}>Waktu Lelang:</h4>
                             <h3 className={"text-lg font-medium"}>{getAuctionStatus()}</h3>
                         </div>
-                        <Separator/>
-                        {!isBidder && (
+                        <Separator />
+
+                        {!isBidder && getAuctionStatus() !== "Sudah Berakhir" && (
                             <>
                                 <div className="flex flex-row items-center gap-2">
-                                    <img src="https://placehold.co/600" className={"aspect-square size-20"} alt=""/>
+                                    <img src="https://placehold.co/600" className={"aspect-square size-20"} alt="" />
                                     <div className={"flex flex-col items-stretch justify-center space-y-1"}>
                                         <h3 className={"font-medium"}>Tertarik Dengan Barang Ini?</h3>
-                                        <h4 className={"text-xs"}>Silahkan beli Nomor Peserta Lelang (NPL) untuk memberikan penawaran barang ini.</h4>
+                                        <h4 className={"text-xs"}>
+                                            Silahkan beli Nomor Peserta Lelang (NPL) untuk memberikan penawaran barang ini.
+                                        </h4>
                                     </div>
                                 </div>
-                                <Button className={"w-full"} onClick={() => navigate({to: "/bidder-form", search: {auction_id: auction.id}})}>
+                                <Button
+                                    className={"w-full"}
+                                    onClick={() =>
+                                        navigate({
+                                            to: "/bidder-form",
+                                            search: { auction_id: auction.id },
+                                        })
+                                    }
+                                >
                                     Beli NPL
                                 </Button>
                             </>
                         )}
-                        {isBidder && (
-                            <Button className={"w-full"}
-                                    onClick={() => navigate({to: "/auction-room/$id", params: {id: auction.id.toString()}})}>
+
+                        {isBidder && getAuctionStatus() === "Sedang Berlangsung" && (
+                            <Button
+                                className={"w-full"}
+                                onClick={() =>
+                                    navigate({
+                                        to: "/auction-room/$id",
+                                        params: { id: auction.id.toString() },
+                                    })
+                                }
+                            >
                                 Masuk room lelang
                             </Button>
                         )}
                     </div>
                 </DrawerContent>
             </Drawer>
+
         </div>
     )
 }

@@ -27,17 +27,17 @@ export const Route = createFileRoute("/")({
 function HomeComponent() {
     const GREETING_CONTENT = [
         {
-            image_url: "https://placehold.co/400/white/gray?text=Met+Datang",
+            image_url: "/public/illustrations/index_1.png",
             title: "Selamat Datang di Leon",
             subtitle: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, aspernatur"
         },
         {
-            image_url: "https://placehold.co/400/white/gray?text=Ikut+Lelang",
+            image_url: "/public/illustrations/index_2.png",
             title: "Bla bla womp womp",
             subtitle: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, aspernatur"
         },
         {
-            image_url: "https://placehold.co/400/white/gray?text=Aman+Banget+Sih",
+            image_url: "/public/illustrations/index_3.png",
             title: "Womp bla womp womp",
             subtitle: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto, aspernatur"
         },
@@ -66,7 +66,7 @@ function HomeComponent() {
                     <CarouselContent>
                         {GREETING_CONTENT.map((item) => (
                             <CarouselItem>
-                                <img className={"border-1 aspect-square size-full object-cover"} src={item.image_url}
+                                <img className={"aspect-square size-full object-contain"} src={item.image_url}
                                      alt=""/>
                             </CarouselItem>
                         ))}

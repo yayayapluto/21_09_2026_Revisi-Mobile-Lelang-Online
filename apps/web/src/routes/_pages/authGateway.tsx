@@ -26,8 +26,8 @@ function RouteComponent() {
     const navigate = useNavigate();
     return (
         <div className="h-full flex flex-col justify-end gap-12 px-4 py-6">
-            <img className="border-1 aspect-square object-cover"
-                 src="https://placehold.co/400/white/gray?text=Aman+Banget+Sih" alt=""/>
+            <img className="aspect-square object-contain"
+                 src={"/public/illustrations/auth_gateway_1.png"} alt=""/>
             <div className="flex flex-col justify-center text-center space-y-4">
                 <h3 className="text-xl font-semibold">
                     Yuk, Siapkan Akun Kamu
