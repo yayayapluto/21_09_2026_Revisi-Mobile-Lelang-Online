@@ -23,7 +23,7 @@ const fetchAuctionDetail = async (id: string): Promise<Auction> => {
     const response = await axios.get<ApiResponse<Auction>>(
         `${import.meta.env.VITE_SERVER_URL}/auctions/${id}`,
         {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {Authorization: `Bearer ${token}`},
         }
     )
     return response.data.content!
@@ -36,14 +36,14 @@ const fetchPaymentStatus = async (id: string): Promise<BidderPayment | null> => 
         const userResponse = await axios.get<ApiResponse<User>>(
             `${import.meta.env.VITE_SERVER_URL}/auth/me`,
             {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             },
         )
 
         const response = await axios.get<ApiResponse<BidderPayment>>(
             `${import.meta.env.VITE_SERVER_URL}/payment/check?auction_id=${id}&user_id=${userResponse.data.content?.id}`,
             {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {Authorization: `Bearer ${token}`},
             },
         )
 
@@ -56,12 +56,12 @@ const fetchPaymentStatus = async (id: string): Promise<BidderPayment | null> => 
 
 export const Route = createFileRoute('/_pages/_main/detail/$id/')({
     component: RouteComponent,
-    loader: async ({ params }) => {
+    loader: async ({params}) => {
         return {auction: await fetchAuctionDetail(params.id), payment: await fetchPaymentStatus(params.id)}
     }
 })
 
-const DetailRow = ({ label, value }: { label: string; value: any }) => {
+const DetailRow = ({label, value}: { label: string; value: any }) => {
     if (!value) return null
     return (
         <>
@@ -211,8 +211,9 @@ function RouteComponent() {
                 <div className="py-3 px-4 bg-white space-y-2">
                     <h3 className="text-lg font-medium">Info Lelang</h3>
                     <div className="grid grid-cols-2 gap-1 items-start">
-                        <DetailRow label="Jadwal Lelang" value={new Date(auction.start_date).toLocaleDateString('id-ID')} />
-                        <DetailRow label="Penyelenggara Lelang" value={auction.organizer.name} />
+                        <DetailRow label="Jadwal Lelang"
+                                   value={new Date(auction.start_date).toLocaleDateString('id-ID')}/>
+                        <DetailRow label="Penyelenggara Lelang" value={auction.organizer.name}/>
                         <h3 className={"text-muted-foreground"}>Kontak PIC</h3>
                         <h3 className="flex items-start">
                             <span className="mr-2">:</span>
@@ -228,13 +229,14 @@ function RouteComponent() {
                     <h3 className="text-lg font-medium">Detail Barang</h3>
                     <div className="grid grid-cols-2 gap-1 items-start">
                         {Object.entries(basicDetailFields).map(([key, value]) => (
-                            <DetailRow key={key} label={key} value={value} />
+                            <DetailRow key={key} label={key} value={value}/>
                         ))}
                     </div>
                     <div className={"flex items-center justify-center"}>
                         <Drawer>
                             <DrawerTrigger asChild>
-                                <span className="text-orange-600 hover:text-orange-700 font-medium my-2 flex gap-2 items-center">
+                                <span
+                                    className="text-orange-600 hover:text-orange-700 font-medium my-2 flex gap-2 items-center">
                                     Lihat Selengkapnya <ChevronDown/>
                                 </span>
                             </DrawerTrigger>
@@ -247,11 +249,12 @@ function RouteComponent() {
                                         <Card className={"py-0 px-4"}>
                                             <Accordion type="single" defaultValue={"item-1"} collapsible>
                                                 <AccordionItem value="item-1">
-                                                    <AccordionTrigger className={"text-sm"}>Info Barang</AccordionTrigger>
+                                                    <AccordionTrigger className={"text-sm"}>Info
+                                                        Barang</AccordionTrigger>
                                                     <AccordionContent>
                                                         <div className="grid grid-cols-2 gap-1 items-start text-sm">
                                                             {Object.entries(fullDetailFields).map(([key, value]) => (
-                                                                <DetailRow key={key} label={key} value={value} />
+                                                                <DetailRow key={key} label={key} value={value}/>
                                                             ))}
                                                         </div>
                                                     </AccordionContent>
@@ -266,7 +269,7 @@ function RouteComponent() {
                                                     <AccordionContent>
                                                         <div className="grid grid-cols-2 gap-1 items-start text-sm">
                                                             {Object.entries(documentFields).map(([key, value]) => (
-                                                                <DetailRow key={key} label={key} value={value} />
+                                                                <DetailRow key={key} label={key} value={value}/>
                                                             ))}
                                                         </div>
                                                     </AccordionContent>
@@ -281,7 +284,8 @@ function RouteComponent() {
                                                     <AccordionContent>
                                                         <div className="grid grid-cols-2 gap-1 items-start text-sm">
                                                             {Object.entries(gradeFields).map(([key, value]) => (
-                                                                <DetailRow key={key} label={key} value={value.toUpperCase()} />
+                                                                <DetailRow key={key} label={key}
+                                                                           value={value.toUpperCase()}/>
                                                             ))}
                                                         </div>
                                                     </AccordionContent>
@@ -321,16 +325,17 @@ function RouteComponent() {
                             <h4 className={"text-sm"}>Waktu Lelang:</h4>
                             <h3 className={"text-lg font-medium"}>{getAuctionStatus()}</h3>
                         </div>
-                        <Separator />
+                        <Separator/>
 
                         {!isBidder && getAuctionStatus() !== "Sudah Berakhir" && (
                             <>
                                 <div className="flex flex-row items-center gap-2">
-                                    <img src="https://placehold.co/600" className={"aspect-square size-20"} alt="" />
+                                    <img src="https://placehold.co/600" className={"aspect-square size-20"} alt=""/>
                                     <div className={"flex flex-col items-stretch justify-center space-y-1"}>
                                         <h3 className={"font-medium"}>Tertarik Dengan Barang Ini?</h3>
                                         <h4 className={"text-xs"}>
-                                            Silahkan beli Nomor Peserta Lelang (NPL) untuk memberikan penawaran barang ini.
+                                            Silahkan beli Nomor Peserta Lelang (NPL) untuk memberikan penawaran barang
+                                            ini.
                                         </h4>
                                     </div>
                                 </div>
@@ -339,7 +344,7 @@ function RouteComponent() {
                                     onClick={() =>
                                         navigate({
                                             to: "/bidder-form",
-                                            search: { auction_id: auction.id },
+                                            search: {auction_id: auction.id},
                                         })
                                     }
                                 >
@@ -354,7 +359,7 @@ function RouteComponent() {
                                 onClick={() =>
                                     navigate({
                                         to: "/auction-room/$id",
-                                        params: { id: auction.id.toString() },
+                                        params: {id: auction.id.toString()},
                                     })
                                 }
                             >

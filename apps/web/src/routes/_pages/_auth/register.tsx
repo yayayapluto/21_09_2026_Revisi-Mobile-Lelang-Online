@@ -79,7 +79,8 @@ function RouteComponent() {
                     className="flex-1 flex flex-col gap-6 justify-center px-4"
                 >
                     <div className="flex flex-col items-center justify-center">
-                        <img src={"/public/illustrations/register.png"} alt="" className="aspect-square size-64 object-contain"/>
+                        <img src={"/public/illustrations/register.png"} alt=""
+                             className="aspect-square size-64 object-contain"/>
                     </div>
                     <form.Field name="username" children={(field) => (
                         <div className="flex flex-col gap-2">

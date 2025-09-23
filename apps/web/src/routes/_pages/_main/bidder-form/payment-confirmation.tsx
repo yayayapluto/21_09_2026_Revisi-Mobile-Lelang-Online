@@ -7,7 +7,7 @@ import type {ApiResponse} from "../../../../../types/api-response";
 import Cookies from "js-cookie";
 
 const SearchSchema = z.object({
-    order_id: z.number(),
+    order_id: z.string(),
     redirect: z.string(),
 })
 
@@ -20,7 +20,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const navigate = useNavigate()
-    const { order_id, redirect } = Route.useSearch()
+    const {order_id, redirect} = Route.useSearch()
 
     const [status, setStatus] = React.useState<"loading" | "success" | "failed">("loading")
     const [countdown, setCountdown] = React.useState(3)
@@ -53,7 +53,7 @@ function RouteComponent() {
                 setCountdown((c) => {
                     if (c <= 1) {
                         clearInterval(interval)
-                        navigate({ to: redirect})
+                        navigate({to: redirect})
                         return 0
                     }
                     return c - 1
@@ -86,7 +86,8 @@ function RouteComponent() {
                         />
                         <h3 className="text-xl font-medium">Pembayaran sudah terverifikasi!</h3>
                         <p className="text-muted-foreground text-justify text-pretty">
-                            Kamu bisa lanjut bla bla Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, cumque!
+                            Kamu bisa lanjut bla bla Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque,
+                            cumque!
                         </p>
                     </>
                 )}
@@ -113,7 +114,7 @@ function RouteComponent() {
             </p>
             <Button
                 disabled={countdown > 0}
-                onClick={() => navigate({ to: "/detail/$id", params: { id: "1" }, search: { bidder: true } })}
+                onClick={() => navigate({to: "/detail/$id", params: {id: "1"}, search: {bidder: true}})}
             >
                 Klik disini jika kamu belum dialihkan
             </Button>

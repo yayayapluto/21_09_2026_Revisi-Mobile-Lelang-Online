@@ -1,10 +1,5 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router'
-import {
-    Carousel,
-    type CarouselApi,
-    CarouselContent,
-    CarouselItem,
-} from "@/components/ui/carousel"
+import {Carousel, type CarouselApi, CarouselContent, CarouselItem,} from "@/components/ui/carousel"
 import React from "react";
 import {cn} from "@/lib/utils";
 import Autoplay from "embla-carousel-autoplay"
@@ -15,7 +10,6 @@ import axios from "axios";
 import type {ApiResponse} from "../../../../types/api-response";
 import Cookies from "js-cookie";
 import type {Pagination} from "../../../../types/pagination";
-import type {Auction} from "../../../../types/auction";
 import {AuctionCard} from "@/components/auction-card";
 import {useInfiniteQuery} from "@tanstack/react-query";
 
@@ -23,12 +17,12 @@ export const Route = createFileRoute('/_pages/_main/home')({
     component: RouteComponent,
 })
 
-const fetchAuctions = async ({ pageParam = 1 }): Promise<ApiResponse<Pagination>> => {
+const fetchAuctions = async ({pageParam = 1}): Promise<ApiResponse<Pagination>> => {
     const token = Cookies.get("auth_token")
     const response = await axios.get<ApiResponse<Pagination>>(
         `${import.meta.env.VITE_SERVER_URL}/auctions?page=${pageParam}`,
         {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {Authorization: `Bearer ${token}`},
         }
     )
     return response.data
@@ -81,7 +75,7 @@ function RouteComponent() {
                     fetchNextPage()
                 }
             },
-            { threshold: 0.1 }
+            {threshold: 0.1}
         )
 
         if (loadMoreRef.current) observer.observe(loadMoreRef.current)
@@ -115,7 +109,7 @@ function RouteComponent() {
             </div>
             <div className="flex flex-col gap-4">
                 <Carousel setApi={setApi} plugins={[
-                    Autoplay({ delay: 3000 }),
+                    Autoplay({delay: 3000}),
                 ]}>
                     <CarouselContent>
                         {CAROUSEL_BANNERS.map((banner, index) => (
@@ -157,7 +151,7 @@ function RouteComponent() {
                     <h3 className="text-lg font-semibold">Lelang Terbaru</h3>
                     <div className={"grid grid-cols-2 gap-2"}>
                         {auctions.map((auction, index) => (
-                            <AuctionCard auction={auction} key={index} />
+                            <AuctionCard auction={auction} key={index}/>
                         ))}
                     </div>
                     {hasNextPage && (

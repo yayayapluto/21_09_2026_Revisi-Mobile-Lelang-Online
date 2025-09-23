@@ -29,7 +29,7 @@ export const Route = createFileRoute('/_pages/_auth/login')({
 
 function RouteComponent() {
     const navigate = useNavigate();
-    const search = useSearch({ from: "/_pages/_auth/login" })
+    const search = useSearch({from: "/_pages/_auth/login"})
 
     useEffect(() => {
         if (search.reason === "no-token") {
@@ -48,15 +48,15 @@ function RouteComponent() {
         validators: {
             onChange: LoginSchema
         },
-        onSubmit: async ({ value }) => {
+        onSubmit: async ({value}) => {
             try {
                 const res = await axios.post<ApiResponse>(
                     `${import.meta.env.VITE_SERVER_URL}/auth/login`,
                     value
                 )
-                Cookies.set("auth_token", res.data.content, { expires: 7 })
+                Cookies.set("auth_token", res.data.content, {expires: 7})
                 toast.success(res.data.message)
-                navigate({ to: search.fallback || "/home", viewTransition: true })
+                navigate({to: search.fallback || "/home", viewTransition: true})
             } catch (err: any) {
                 if (err.response?.data?.message) {
                     toast.error(err.response.data.message)
@@ -88,7 +88,8 @@ function RouteComponent() {
                 className={"flex-1 flex flex-col gap-6 justify-center px-4"}
             >
                 <div className="flex flex-col items-center justify-center">
-                    <img src={"/public/illustrations/login.png"} alt="" className="aspect-square size-64 object-contain"/>
+                    <img src={"/public/illustrations/login.png"} alt=""
+                         className="aspect-square size-64 object-contain"/>
                 </div>
                 <form.Field
                     name={"identity"}

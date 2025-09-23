@@ -1,4 +1,4 @@
-import {createFileRoute, redirect, useLoaderData, useNavigate} from '@tanstack/react-router'
+import {createFileRoute, useNavigate} from '@tanstack/react-router'
 import {Skeleton} from "@/components/ui/skeleton";
 import {Separator} from "@/components/ui/separator";
 import {Info} from "lucide-react";
@@ -7,14 +7,13 @@ import type {User} from "../../../../../types/user";
 import Cookies from "js-cookie";
 import axios from "axios";
 import type {ApiResponse} from "../../../../../types/api-response";
-import type {Auction} from "../../../../../types/auction";
 
-const fetchProfileData = async () : Promise<User> => {
+const fetchProfileData = async (): Promise<User> => {
     const token = Cookies.get("auth_token")
     const response = await axios.get<ApiResponse<User>>(
         `${import.meta.env.VITE_SERVER_URL}/auth/me`,
         {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {Authorization: `Bearer ${token}`},
         }
     )
     return response.data.content!
@@ -58,7 +57,7 @@ function RouteComponent() {
                     variant="outline"
                     onClick={async () => {
                         Cookies.remove("auth_token")
-                        await navigate({ to: "/login", search: {fallback: "", reason: undefined}})
+                        await navigate({to: "/login", search: {fallback: "", reason: undefined}})
                     }}
                 >
                     Keluar Akun

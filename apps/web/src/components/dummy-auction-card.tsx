@@ -6,7 +6,8 @@ import {useNavigate} from "@tanstack/react-router";
 export const DummyAuctionCard = ({endWithin}: { endWithin?: number }) => {
     const navigate = useNavigate()
     return (
-        <Card className={"p-0 gap-0 rounded-sm"} onClick={() => navigate({to: "/detail/$id", params: {id: "1"}, search: {bidder: false}})}>
+        <Card className={"p-0 gap-0 rounded-sm"}
+              onClick={() => navigate({to: "/detail/$id", params: {id: "1"}, search: {bidder: false}})}>
             {endWithin ? (<div className="relative">
                     <img
                         className="size-full object-cover aspect-square"

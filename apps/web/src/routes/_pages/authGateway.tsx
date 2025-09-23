@@ -12,11 +12,11 @@ export const Route = createFileRoute('/_pages/authGateway')({
         if (token) {
             const res = await axios.get<ApiResponse>(
                 `${import.meta.env.VITE_SERVER_URL}/auth/me`,
-                { headers: { Authorization: `Bearer ${token}` } }
+                {headers: {Authorization: `Bearer ${token}`}}
             )
 
             if (res.data.success) {
-                throw redirect({ to: "/home" })
+                throw redirect({to: "/home"})
             }
         }
     },

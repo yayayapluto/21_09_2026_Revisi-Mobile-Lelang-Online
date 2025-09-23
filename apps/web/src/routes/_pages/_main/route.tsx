@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_pages/_main')({
 
         try {
             const res = await axios.get<ApiResponse>(`${import.meta.env.VITE_SERVER_URL}/auth/me`, {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: {Authorization: `Bearer ${token}`}
             })
 
             if (!res.data.success) {

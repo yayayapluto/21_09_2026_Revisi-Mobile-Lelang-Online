@@ -197,7 +197,7 @@ function RouteComponent() {
                         className="pl-10"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        onKeyUp={() => setFilters((prev) => ({ ...prev, search }))}
+                        onKeyUp={() => setFilters((prev) => ({...prev, search}))}
                     />
                     <SearchIcon size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600"/>
                 </div>
@@ -336,7 +336,8 @@ function RouteComponent() {
             </div>
             <div className="px-2 py-4">
                 <h3 className="text-sm flex gap-1 items-baseline">
-                    Total <span className="text-lg font-medium">{isLoading ? '...' : totalAuctions}</span> lelang ditemukan
+                    Total <span className="text-lg font-medium">{isLoading ? '...' : totalAuctions}</span> lelang
+                    ditemukan
                 </h3>
                 {isLoading ? (
                     <div className="h-40 flex items-center justify-center">
