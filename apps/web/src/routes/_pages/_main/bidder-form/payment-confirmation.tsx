@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 import React from "react";
 import {z} from "zod";
 import axios from "axios";
-import type {ApiResponse} from "../../../../../types/api-response";
+import type {ApiResponse} from "../../../../../types/apiResponse";
 import Cookies from "js-cookie";
 
 const SearchSchema = z.object({

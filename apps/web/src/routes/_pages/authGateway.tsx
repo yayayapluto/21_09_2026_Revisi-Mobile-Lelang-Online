@@ -3,7 +3,7 @@ import React from "react";
 import {Button} from "@/components/ui/button";
 import Cookies from "js-cookie";
 import axios from "axios";
-import type {ApiResponse} from "../../../types/api-response";
+import type {ApiResponse} from "../../../types/apiResponse";
 
 export const Route = createFileRoute('/_pages/authGateway')({
     component: RouteComponent,

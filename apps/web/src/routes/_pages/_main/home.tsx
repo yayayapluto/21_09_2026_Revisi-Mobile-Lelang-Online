@@ -7,7 +7,7 @@ import {DummyAuctionCard} from "@/components/dummy-auction-card";
 import {Input} from "@/components/ui/input";
 import {LoaderCircle, SearchIcon} from "lucide-react";
 import axios from "axios";
-import type {ApiResponse} from "../../../../types/api-response";
+import type {ApiResponse} from "../../../../types/apiResponse";
 import Cookies from "js-cookie";
 import type {Pagination} from "../../../../types/pagination";
 import {AuctionCard} from "@/components/auction-card";

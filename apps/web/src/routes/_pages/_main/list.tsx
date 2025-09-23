@@ -19,7 +19,7 @@ import {Separator} from "@/components/ui/separator";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import axios from "axios";
-import type {ApiResponse} from "../../../../types/api-response";
+import type {ApiResponse} from "../../../../types/apiResponse";
 import type {Pagination} from "../../../../types/pagination";
 import type {Auction} from "../../../../types/auction";
 import type {ObjectType} from "../../../../types/objectType";

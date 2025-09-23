@@ -5,7 +5,7 @@ import React from "react";
 import {cn} from "@/lib/utils";
 import Cookies from "js-cookie";
 import axios from "axios";
-import type {ApiResponse} from "../../types/api-response";
+import type {ApiResponse} from "../../types/apiResponse";
 
 export const Route = createFileRoute("/")({
     component: HomeComponent,

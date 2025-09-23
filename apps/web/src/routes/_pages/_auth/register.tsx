@@ -8,7 +8,7 @@ import {Button} from "@/components/ui/button";
 import axios from "axios";
 import Cookies from "js-cookie"
 import {toast} from "sonner";
-import type {ApiResponse} from "../../../../types/api-response";
+import type {ApiResponse} from "../../../../types/apiResponse";
 import {ArrowLeft} from "lucide-react";
 import React from "react";
 

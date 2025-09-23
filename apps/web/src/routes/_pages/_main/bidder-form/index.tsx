@@ -9,7 +9,7 @@ import {ArrowLeft} from "lucide-react";
 import React from "react";
 import {toast} from "sonner";
 import axios from "axios";
-import type {ApiResponse} from "../../../../../types/api-response";
+import type {ApiResponse} from "../../../../../types/apiResponse";
 import Cookies from "js-cookie";
 import type {Auction} from "../../../../../types/auction";
 import type {AuctionBidder} from "../../../../../types/auctionBidder";

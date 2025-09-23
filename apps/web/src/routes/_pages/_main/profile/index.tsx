@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button";
 import type {User} from "../../../../../types/user";
 import Cookies from "js-cookie";
 import axios from "axios";
-import type {ApiResponse} from "../../../../../types/api-response";
+import type {ApiResponse} from "../../../../../types/apiResponse";
 
 const fetchProfileData = async (): Promise<User> => {
     const token = Cookies.get("auth_token")

@@ -9,7 +9,7 @@ import {ArrowLeft} from "lucide-react";
 import React, {useEffect} from "react";
 import axios from "axios";
 import Cookies from "js-cookie"
-import type {ApiResponse} from "../../../../types/api-response";
+import type {ApiResponse} from "../../../../types/apiResponse";
 import {toast} from "sonner";
 
 const LoginSchema = z.object({

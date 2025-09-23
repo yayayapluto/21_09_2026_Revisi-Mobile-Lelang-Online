@@ -13,7 +13,7 @@ import {Card} from "@/components/ui/card";
 import axios from "axios";
 import Cookies from "js-cookie";
 import type {Auction} from "../../../../../../types/auction";
-import type {ApiResponse} from "../../../../../../types/api-response";
+import type {ApiResponse} from "../../../../../../types/apiResponse";
 import Loader from "@/components/loader";
 import type {User} from "../../../../../../types/user";
 import type {BidderPayment} from "../../../../../../types/bidderPayment";

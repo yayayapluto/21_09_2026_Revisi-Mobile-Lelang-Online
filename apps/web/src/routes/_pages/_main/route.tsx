@@ -3,7 +3,7 @@ import React from "react";
 import {Footer} from "@/components/footer";
 import {AnimatePresence, motion} from "framer-motion";
 import axios from "axios";
-import type {ApiResponse} from "../../../../types/api-response";
+import type {ApiResponse} from "../../../../types/apiResponse";
 import Cookies from "js-cookie";
 import Loader from "@/components/loader";
 
