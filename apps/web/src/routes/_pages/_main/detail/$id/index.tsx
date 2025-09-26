@@ -1,6 +1,6 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router'
 import {Carousel, type CarouselApi, CarouselContent, CarouselItem} from "@/components/ui/carousel";
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {Badge} from "@/components/ui/badge";
 import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer";
 import {ArrowLeft, ChevronDown} from "lucide-react";
@@ -17,6 +17,7 @@ import type {ApiResponse} from "../../../../../../types/apiResponse";
 import Loader from "@/components/loader";
 import type {User} from "../../../../../../types/user";
 import type {BidderPayment} from "../../../../../../types/bidderPayment";
+import { AuthDataContext } from '@/contexts/authDataContext';
 
 const fetchAuctionDetail = async (id: string): Promise<Auction> => {
     const token = Cookies.get("auth_token")
@@ -29,19 +30,12 @@ const fetchAuctionDetail = async (id: string): Promise<Auction> => {
     return response.data.content!
 }
 
-const fetchPaymentStatus = async (id: string): Promise<BidderPayment | null> => {
+const fetchPaymentStatus = async (id: string, userID: number): Promise<BidderPayment | null> => {
     try {
         const token = Cookies.get("auth_token")
 
-        const userResponse = await axios.get<ApiResponse<User>>(
-            `${import.meta.env.VITE_SERVER_URL}/auth/me`,
-            {
-                headers: {Authorization: `Bearer ${token}`},
-            },
-        )
-
         const response = await axios.get<ApiResponse<BidderPayment>>(
-            `${import.meta.env.VITE_SERVER_URL}/payment/check?auction_id=${id}&user_id=${userResponse.data.content?.id}`,
+            `${import.meta.env.VITE_SERVER_URL}/payment/check?auction_id=${id}&user_id=${userID}`,
             {
                 headers: {Authorization: `Bearer ${token}`},
             },
@@ -53,12 +47,11 @@ const fetchPaymentStatus = async (id: string): Promise<BidderPayment | null> => 
     }
 }
 
-
 export const Route = createFileRoute('/_pages/_main/detail/$id/')({
-    component: RouteComponent,
-    loader: async ({params}) => {
-        return {auction: await fetchAuctionDetail(params.id), payment: await fetchPaymentStatus(params.id)}
-    }
+    loader: async ({ params }) => {
+        return { auction: await fetchAuctionDetail(params.id) }
+    },
+    component: RouteComponent
 })
 
 const DetailRow = ({label, value}: { label: string; value: any }) => {
@@ -75,8 +68,18 @@ const DetailRow = ({label, value}: { label: string; value: any }) => {
 }
 
 function RouteComponent() {
-    const {auction, payment} = Route.useLoaderData()
+    const {auction} = Route.useLoaderData()
     const navigate = useNavigate()
+
+    const userData = useContext(AuthDataContext)
+    const userID = userData?.id
+
+    const [payment, setPayment] = React.useState<BidderPayment | null>(null)
+
+    React.useEffect(() => {
+        if (!userID) return
+        fetchPaymentStatus(auction.id.toString(), userID).then(setPayment)
+    }, [auction.id, userID])
 
     const [api, setApi] = React.useState<CarouselApi>()
     const [current, setCurrent] = React.useState(0)

@@ -3,8 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import type {ApiResponse} from "../../../../../types/apiResponse";
 import type {Pagination} from "../../../../../types/pagination";
-import type {User} from "../../../../../types/user";
-import React from "react";
+import React, {useContext} from "react";
 import type {BidderPayment} from "../../../../../types/bidderPayment";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {Input} from "@/components/ui/input";
@@ -25,12 +24,14 @@ import {Label} from "@/components/ui/label";
 import {Separator} from "@/components/ui/separator";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {HistoryCard} from "@/components/history-card";
+import {AuthDataContext} from "@/contexts/authDataContext";
 
 export const Route = createFileRoute('/_pages/_main/history/')({
-    component: HistoryPage
+    component: RouteComponent
 })
 
 const fetchHistories = async ({
+                                  userID,
                                   pageParam = 1,
                                   search,
                                   sortBy,
@@ -38,6 +39,7 @@ const fetchHistories = async ({
                                   status,
                                   payment_type,
                               }: {
+    userID: number;
     pageParam?: number;
     search?: string;
     sortBy?: string;
@@ -46,13 +48,6 @@ const fetchHistories = async ({
     payment_type?: string;
 }): Promise<ApiResponse<Pagination<BidderPayment>>> => {
     const token = Cookies.get("auth_token")
-
-    // Get user ID first
-    const userResponse = await axios.get<ApiResponse<User>>(
-        `${import.meta.env.VITE_SERVER_URL}/auth/me`,
-        {headers: {Authorization: `Bearer ${token}`}}
-    )
-    const userID = userResponse.data.content?.id
 
     const params = new URLSearchParams({
         page: pageParam.toString(),
@@ -72,7 +67,7 @@ const fetchHistories = async ({
     return response.data
 }
 
-function HistoryPage() {
+function RouteComponent() {
     const [search, setSearch] = React.useState("")
     const [selectedSort, setSelectedSort] = React.useState("")
     const [filters, setFilters] = React.useState<{
@@ -83,6 +78,9 @@ function HistoryPage() {
         payment_type?: string
     }>({search: ""})
 
+    const userData = useContext(AuthDataContext)
+    const userID = userData?.id!
+
     const {
         data,
         fetchNextPage,
@@ -91,7 +89,7 @@ function HistoryPage() {
         isLoading,
     } = useInfiniteQuery({
         queryKey: ['payment-histories', filters],
-        queryFn: ({pageParam}) => fetchHistories({pageParam, ...filters}),
+        queryFn: ({pageParam}) => fetchHistories({userID, pageParam, ...filters}),
         getNextPageParam: (lastPage) => {
             const currentPage = lastPage.content?.current_page ?? 1
             const totalPages = lastPage.content?.total_pages ?? 1
@@ -101,10 +99,7 @@ function HistoryPage() {
     })
 
     const paymentHistories = data?.pages.flatMap(page => page.content?.data ?? []) ?? []
-    const totalHistories =
-        (data?.pages?.[0]?.content?.total_pages ?? 0) *
-        (data?.pages?.[0]?.content?.per_page ?? 0) ||
-        paymentHistories.length
+    const totalHistories = data?.pages[0].content?.total_items
 
     const sortOptions = [
         {value: 'newest', label: 'Terbaru', sortBy: 'created_at', sortDir: 'desc'},
@@ -150,6 +145,8 @@ function HistoryPage() {
         }
     }, [observerRef.current, hasNextPage, isFetchingNextPage])
 
+    const [debounceTimer, setDebounceTimer] = React.useState<NodeJS.Timeout | null>(null)
+
     return (
         <div>
             <div className="w-full p-2 sticky top-0 bg-white z-10 flex flex-col gap-4">
@@ -159,8 +156,18 @@ function HistoryPage() {
                         placeholder="Cari riwayat pembayaran"
                         className="pl-10"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        onKeyUp={() => setFilters((prev) => ({...prev, search}))}
+                        onChange={(e) => {
+                            const value = e.target.value
+                            setSearch(value)
+
+                            if (debounceTimer) clearTimeout(debounceTimer)
+
+                            const timer = setTimeout(() => {
+                                setFilters((prev) => ({...prev, search: value}))
+                            }, 500) // 500ms delay
+
+                            setDebounceTimer(timer)
+                        }}
                     />
                     <SearchIcon size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600"/>
                 </div>

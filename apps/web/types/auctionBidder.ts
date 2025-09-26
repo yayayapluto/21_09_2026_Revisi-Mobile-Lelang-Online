@@ -1,5 +1,6 @@
 import type {Mandatory} from "./mandatory";
 import type {User} from "./user";
+import type {Auction} from "./auction";
 
 export type AuctionBidder = Mandatory & {
     user_id: number
@@ -9,4 +10,5 @@ export type AuctionBidder = Mandatory & {
     account_number: string
     account_name: string
     user: User
+    auction: Auction
 }

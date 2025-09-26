@@ -22,6 +22,7 @@ import { Route as PagesMainHistoryIndexRouteImport } from './routes/_pages/_main
 import { Route as PagesMainBidderFormIndexRouteImport } from './routes/_pages/_main/bidder-form/index'
 import { Route as PagesMainBidderFormPaymentConfirmationRouteImport } from './routes/_pages/_main/bidder-form/payment-confirmation'
 import { Route as PagesMainAuctionRoomIdRouteImport } from './routes/_pages/_main/auction-room/$id'
+import { Route as PagesMainHistoryOrder_idIndexRouteImport } from './routes/_pages/_main/history/$order_id/index'
 import { Route as PagesMainDetailIdIndexRouteImport } from './routes/_pages/_main/detail/$id/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +90,12 @@ const PagesMainAuctionRoomIdRoute = PagesMainAuctionRoomIdRouteImport.update({
   path: '/auction-room/$id',
   getParentRoute: () => PagesMainRouteRoute,
 } as any)
+const PagesMainHistoryOrder_idIndexRoute =
+  PagesMainHistoryOrder_idIndexRouteImport.update({
+    id: '/history/$order_id/',
+    path: '/history/$order_id/',
+    getParentRoute: () => PagesMainRouteRoute,
+  } as any)
 const PagesMainDetailIdIndexRoute = PagesMainDetailIdIndexRouteImport.update({
   id: '/detail/$id/',
   path: '/detail/$id/',
@@ -108,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof PagesMainHistoryIndexRoute
   '/profile': typeof PagesMainProfileIndexRoute
   '/detail/$id': typeof PagesMainDetailIdIndexRoute
+  '/history/$order_id': typeof PagesMainHistoryOrder_idIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -122,6 +130,7 @@ export interface FileRoutesByTo {
   '/history': typeof PagesMainHistoryIndexRoute
   '/profile': typeof PagesMainProfileIndexRoute
   '/detail/$id': typeof PagesMainDetailIdIndexRoute
+  '/history/$order_id': typeof PagesMainHistoryOrder_idIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -139,6 +148,7 @@ export interface FileRoutesById {
   '/_pages/_main/history/': typeof PagesMainHistoryIndexRoute
   '/_pages/_main/profile/': typeof PagesMainProfileIndexRoute
   '/_pages/_main/detail/$id/': typeof PagesMainDetailIdIndexRoute
+  '/_pages/_main/history/$order_id/': typeof PagesMainHistoryOrder_idIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/detail/$id'
+    | '/history/$order_id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/detail/$id'
+    | '/history/$order_id'
   id:
     | '__root__'
     | '/'
@@ -185,6 +197,7 @@ export interface FileRouteTypes {
     | '/_pages/_main/history/'
     | '/_pages/_main/profile/'
     | '/_pages/_main/detail/$id/'
+    | '/_pages/_main/history/$order_id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesMainAuctionRoomIdRouteImport
       parentRoute: typeof PagesMainRouteRoute
     }
+    '/_pages/_main/history/$order_id/': {
+      id: '/_pages/_main/history/$order_id/'
+      path: '/history/$order_id'
+      fullPath: '/history/$order_id'
+      preLoaderRoute: typeof PagesMainHistoryOrder_idIndexRouteImport
+      parentRoute: typeof PagesMainRouteRoute
+    }
     '/_pages/_main/detail/$id/': {
       id: '/_pages/_main/detail/$id/'
       path: '/detail/$id'
@@ -320,6 +340,7 @@ interface PagesMainRouteRouteChildren {
   PagesMainHistoryIndexRoute: typeof PagesMainHistoryIndexRoute
   PagesMainProfileIndexRoute: typeof PagesMainProfileIndexRoute
   PagesMainDetailIdIndexRoute: typeof PagesMainDetailIdIndexRoute
+  PagesMainHistoryOrder_idIndexRoute: typeof PagesMainHistoryOrder_idIndexRoute
 }
 
 const PagesMainRouteRouteChildren: PagesMainRouteRouteChildren = {
@@ -332,6 +353,7 @@ const PagesMainRouteRouteChildren: PagesMainRouteRouteChildren = {
   PagesMainHistoryIndexRoute: PagesMainHistoryIndexRoute,
   PagesMainProfileIndexRoute: PagesMainProfileIndexRoute,
   PagesMainDetailIdIndexRoute: PagesMainDetailIdIndexRoute,
+  PagesMainHistoryOrder_idIndexRoute: PagesMainHistoryOrder_idIndexRoute,
 }
 
 const PagesMainRouteRouteWithChildren = PagesMainRouteRoute._addFileChildren(

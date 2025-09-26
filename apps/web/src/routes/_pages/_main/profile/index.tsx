@@ -7,26 +7,16 @@ import type {User} from "../../../../../types/user";
 import Cookies from "js-cookie";
 import axios from "axios";
 import type {ApiResponse} from "../../../../../types/apiResponse";
-
-const fetchProfileData = async (): Promise<User> => {
-    const token = Cookies.get("auth_token")
-    const response = await axios.get<ApiResponse<User>>(
-        `${import.meta.env.VITE_SERVER_URL}/auth/me`,
-        {
-            headers: {Authorization: `Bearer ${token}`},
-        }
-    )
-    return response.data.content!
-}
+import {useContext} from "react";
+import {AuthDataContext} from "@/contexts/authDataContext";
 
 export const Route = createFileRoute('/_pages/_main/profile/')({
-    component: RouteComponent,
-    loader: () => fetchProfileData()
+    component: RouteComponent
 })
 
 function RouteComponent() {
     const navigate = useNavigate()
-    const profile = Route.useLoaderData()
+    const userData = useContext(AuthDataContext)
     return (
         <div className="h-full flex flex-col justify-center gap-8 p-4">
             <div className="flex items-center justify-center">
@@ -40,18 +30,18 @@ function RouteComponent() {
                 </h3>
                 <div className="flex items-center justify-between">
                     <h3 className="text-muted-foreground">Username</h3>
-                    <h3>{profile.username}</h3>
+                    <h3>{userData?.username}</h3>
                 </div>
                 <div className="flex items-center justify-between">
                     <h3 className="text-muted-foreground">Email</h3>
-                    <h3>{profile.email}</h3>
+                    <h3>{userData?.email}</h3>
                 </div>
             </div>
             <Separator/>
             <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                     <h3 className="text-muted-foreground">Terakhir Login Pada</h3>
-                    <h3>{profile.last_login_at?.toString()}</h3>
+                    <h3>{userData?.last_login_at?.toString()}</h3>
                 </div>
                 <Button
                     variant="outline"

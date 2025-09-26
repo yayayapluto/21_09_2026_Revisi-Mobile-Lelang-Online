@@ -149,10 +149,7 @@ function RouteComponent() {
     })
 
     const auctions = data?.pages.flatMap(page => page.content?.data ?? []) ?? []
-    const totalAuctions =
-        (data?.pages?.[0]?.content?.total_pages ?? 0) *
-        (data?.pages?.[0]?.content?.per_page ?? 0) ||
-        auctions.length
+    const totalAuctions = data?.pages[0].content?.total_items
 
 
     const sortOptions = [
@@ -336,8 +333,7 @@ function RouteComponent() {
             </div>
             <div className="px-2 py-4">
                 <h3 className="text-sm flex gap-1 items-baseline">
-                    Total <span className="text-lg font-medium">{isLoading ? '...' : totalAuctions}</span> lelang
-                    ditemukan
+                    Total <span className="text-lg font-medium">{isLoading ? '...' : totalAuctions}</span> lelang ditemukan
                 </h3>
                 {isLoading ? (
                     <div className="h-40 flex items-center justify-center">

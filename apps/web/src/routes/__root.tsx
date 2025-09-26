@@ -2,6 +2,7 @@ import {ThemeProvider} from "@/components/theme-provider";
 import {Toaster} from "@/components/ui/sonner";
 import {createRootRouteWithContext, HeadContent, Outlet, useRouterState,} from "@tanstack/react-router";
 import "../index.css";
+import {TanStackRouterDevtools} from "@tanstack/react-router-devtools";
 
 export interface RouterAppContext {
 }
