@@ -3,6 +3,7 @@ import {Toaster} from "@/components/ui/sonner";
 import {createRootRouteWithContext, HeadContent, Outlet, useRouterState,} from "@tanstack/react-router";
 import "../index.css";
 import {TanStackRouterDevtools} from "@tanstack/react-router-devtools";
+import Header from "@/components/header";
 
 export interface RouterAppContext {
 }
@@ -42,7 +43,6 @@ function RootComponent() {
                         <Outlet/>
                     </div>
                 </div>
-
             </ThemeProvider>
             {/*<TanStackRouterDevtools position="bottom-left" />*/}
         </>
